@@ -4,6 +4,7 @@ import { defineStore } from "pinia";
 const photos_ls = localStorage.getItem("favorites");
 
 export const usePhotosStore = defineStore("photos", () => {
+  const base_url = ref("https://api.unsplash.com/photos");
   const access_key = ref("84nIYHPg90SxtADfduvvrSqaJNlPQJDdnePt-O_U3A4");
   const favorites: any = ref(photos_ls ? JSON.parse(photos_ls) : []);
 
@@ -12,7 +13,10 @@ export const usePhotosStore = defineStore("photos", () => {
       (p: { id: number }) => p.id === photo.id
     );
 
-    if (!photo_exists) {
+    if (photo_exists) {
+      favorites.value.splice(favorites.value.indexOf(photo_exists), 1);
+      localStorage.setItem("favorites", JSON.stringify([...favorites.value]));
+    } else {
       let favorites_old = photos_ls ? JSON.parse(photos_ls) : [];
 
       localStorage.setItem(
@@ -25,6 +29,7 @@ export const usePhotosStore = defineStore("photos", () => {
 
   return {
     access_key,
+    base_url,
     favorites,
     //
     addToFavorites,

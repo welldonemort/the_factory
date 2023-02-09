@@ -18,7 +18,18 @@
 
         <div class="right">
           <div class="btn-fav" @click="store.addToFavorites(state.photo)">
-            <img alt="fav-ic" src="@/assets/icons/heart-black.svg" />
+            <img
+              v-if="isFavorite"
+              alt="fav-ic"
+              src="@/assets/icons/heart-filled.svg"
+              class="btn-fav__img"
+            />
+            <img
+              v-else
+              alt="fav-ic"
+              src="@/assets/icons/heart-black.svg"
+              class="btn-fav__img"
+            />
           </div>
 
           <div class="btn-download" @click="download">
@@ -27,7 +38,7 @@
               src="@/assets/icons/download.svg"
               class="btn-download__img"
             />
-            Download
+            <span>Download</span>
           </div>
         </div>
       </div>
@@ -45,9 +56,9 @@
 
 <script>
 import { useRoute } from "vue-router";
-import { onMounted, reactive } from "vue";
+import { computed, onMounted, reactive } from "vue";
 import axios from "axios";
-import TheLoader from "@/components/TheLoader.vue";
+import TheLoader from "@/components/TheLoader/TheLoader.vue";
 import { usePhotosStore } from "@/stores/photos";
 
 export default {
@@ -68,9 +79,9 @@ export default {
       state.is_loading = true;
 
       axios
-        .get(`https://api.unsplash.com/photos/${id}`, {
+        .get(`${store.base_url}/${id}`, {
           headers: {
-            Authorization: `Client-ID 84nIYHPg90SxtADfduvvrSqaJNlPQJDdnePt-O_U3A4`,
+            Authorization: `Client-ID ${store.access_key}`,
           },
         })
         .then((response) => {
@@ -88,7 +99,7 @@ export default {
       axios
         .get(state.photo.links.download_location, {
           headers: {
-            Authorization: `Client-ID 84nIYHPg90SxtADfduvvrSqaJNlPQJDdnePt-O_U3A4`,
+            Authorization: `Client-ID ${store.access_key}`,
           },
         })
         .then((res) => {
@@ -106,118 +117,18 @@ export default {
         });
     };
 
-    onMounted(() => {
-      getPhoto();
+    onMounted(async () => {
+      await getPhoto();
     });
 
-    return { state, download, store };
+    const isFavorite = computed(() => {
+      const fav_exists = store.favorites.find((f) => f.id === state.photo.id);
+      return !!fav_exists;
+    });
+
+    return { state, download, store, isFavorite };
   },
 };
 </script>
 
-<style lang="scss" scoped>
-.photo {
-  width: 100%;
-  margin-bottom: 20vw;
-
-  &__loader {
-    width: 90%;
-    margin: 107px auto;
-  }
-
-  &__header {
-    width: 90%;
-    margin: 0 auto 44px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .left {
-      display: flex;
-      align-items: center;
-
-      &__img {
-        width: 55px;
-        height: 55px;
-        border: 1px solid #ffffff;
-        border-radius: 8px;
-      }
-
-      &__content {
-        font-family: Roboto, sans-serif;
-        display: flex;
-        flex-direction: column;
-        color: #f2f2f2;
-        font-weight: 400;
-        font-size: 2rem;
-        margin-left: 10px;
-
-        .nick {
-          font-size: 1rem;
-          margin-top: 5px;
-        }
-      }
-    }
-
-    .right {
-      display: flex;
-      align-items: center;
-
-      .btn-fav,
-      .btn-download {
-        cursor: pointer;
-
-        &:hover {
-          opacity: 0.7;
-        }
-      }
-
-      .btn-fav {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 50px;
-        height: 50px;
-        background: #fff;
-        box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
-        border-radius: 8px;
-      }
-
-      .btn-download {
-        display: flex;
-        align-items: center;
-        height: 100%;
-        margin-left: 20px;
-        padding: 13px 23px;
-        background: #fff200;
-        border: 1px solid #fff200;
-        box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
-        border-radius: 8px;
-
-        &__img {
-          margin-right: 16px;
-        }
-      }
-    }
-  }
-
-  &__content {
-    display: flex;
-    width: 90%;
-    margin: 0 auto;
-    box-shadow: 0 4px 50px rgba(0, 0, 0, 0.5);
-    border-radius: 8px;
-    overflow: hidden;
-
-    &__img {
-      width: 100%;
-    }
-  }
-
-  &__holder {
-    background: url("@/assets/img/photo-bg.png");
-    height: 774px;
-    padding-top: 43px;
-  }
-}
-</style>
+<style src="./PhotoView.scss" />

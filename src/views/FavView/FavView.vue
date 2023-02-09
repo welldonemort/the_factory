@@ -1,6 +1,6 @@
 <template>
   <div class="fav">
-    <div class="fav__line" />
+    <the-line />
 
     <h1 class="fav__title">Избранное</h1>
 
@@ -22,11 +22,13 @@
 <script>
 import { reactive, onMounted } from "vue";
 import axios from "axios";
-import TheLoader from "@/components/TheLoader.vue";
+import TheLoader from "@/components/TheLoader/TheLoader.vue";
 import { usePhotosStore } from "@/stores/photos";
+import TheLine from "@/components/TheLine/TheLine.vue";
 
 export default {
   components: {
+    TheLine,
     TheLoader,
   },
   setup() {
@@ -42,9 +44,9 @@ export default {
       state.is_loading = true;
 
       axios
-        .get("https://api.unsplash.com/photos", {
+        .get(`${store.base_url}`, {
           headers: {
-            Authorization: `Client-ID 84nIYHPg90SxtADfduvvrSqaJNlPQJDdnePt-O_U3A4`,
+            Authorization: `Client-ID ${store.access_key}`,
           },
           params: { query: state.query, per_page: 8 },
         })
@@ -72,51 +74,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.fav {
-  &__title {
-    font-family: "Roboto", sans-serif;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 3rem;
-    text-align: center;
-    margin: 94px 0 101px;
-  }
-
-  &__holder {
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-    margin: 0 auto 160px;
-  }
-
-  &__line {
-    width: 100%;
-    height: 16px;
-    background: #c4c4c4;
-  }
-
-  &__list {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  &__img-holder {
-    width: 28vw;
-    height: 28vw;
-    overflow: hidden;
-    margin-bottom: 23px;
-    border-radius: 8px;
-    background-size: cover !important;
-
-    &:not(:nth-child(3n + 1)) {
-      margin-left: 2.3vw;
-    }
-
-    &:hover {
-      opacity: 0.7;
-      cursor: pointer;
-    }
-  }
-}
-</style>
+<style src="./FavView.scss" />

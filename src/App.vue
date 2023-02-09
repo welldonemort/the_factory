@@ -8,11 +8,11 @@
 
 <script>
 import { RouterView } from "vue-router";
-import TheHeader from "@/components/TheHeader.vue";
+import TheHeader from "@/components/TheHeader/TheHeader.vue";
 
 export default {
   components: {
-    "the-header": TheHeader,
+    TheHeader,
     RouterView,
   },
 };

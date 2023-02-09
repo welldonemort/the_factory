@@ -1,0 +1,66 @@
+.header-holder {
+  width: 100%;
+  background: #000;
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    margin: 37px auto;
+
+    .logo {
+      width: 185px;
+      height: auto;
+    }
+
+    .buttons {
+      display: flex;
+      align-items: center;
+      color: #fff;
+
+      &:not(:first-child) {
+        margin-left: 38px;
+      }
+
+      &__img {
+        width: 23px;
+        height: auto;
+        margin-right: 10px;
+      }
+
+      &__btn {
+        display: flex;
+        align-items: center;
+        color: #fff;
+
+        &:hover {
+          cursor: pointer;
+          opacity: 0.7;
+        }
+
+        &:not(:first-child) {
+          margin-left: 38px;
+        }
+      }
+    }
+  }
+
+  .header-not-main {
+    margin: 21px auto;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    margin: 17px auto !important;
+  }
+
+  .logo {
+    width: 84px !important;
+  }
+
+  .buttons__span {
+    display: none;
+  }
+}

@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <div class="home__line" />
+    <the-line />
 
     <div class="home__holder">
       <the-loader v-if="state.is_loading" />
@@ -38,11 +38,13 @@
 <script>
 import { reactive, onMounted } from "vue";
 import axios from "axios";
-import TheLoader from "@/components/TheLoader.vue";
+import TheLoader from "@/components/TheLoader/TheLoader.vue";
 import { usePhotosStore } from "@/stores/photos";
+import TheLine from "@/components/TheLine/TheLine.vue";
 
 export default {
   components: {
+    TheLine,
     TheLoader,
   },
   setup() {
@@ -58,7 +60,7 @@ export default {
       state.is_loading = true;
 
       axios
-        .get("https://api.unsplash.com/photos", {
+        .get(`${store.base_url}`, {
           headers: {
             Authorization: `Client-ID ${store.access_key}`,
           },
@@ -88,96 +90,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.home {
-  &__holder {
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-    margin: 107px auto;
-  }
-
-  &__search {
-    display: flex;
-    justify-content: center;
-    background: url("@/assets/img/night.png");
-    background-size: cover;
-    position: relative;
-
-    &::before {
-      background-color: rgba(0, 0, 0, 0.5);
-      content: "";
-      display: block;
-      height: 100%;
-      position: absolute;
-      width: 100%;
-    }
-
-    .input-holder {
-      display: flex;
-      position: relative;
-      width: 45%;
-      margin: 91px 0;
-    }
-
-    &__ic {
-      position: absolute;
-      right: 23px;
-      top: 32%;
-      width: 23px;
-      height: 23px;
-
-      &:hover {
-        cursor: pointer;
-        opacity: 0.7;
-      }
-    }
-
-    &__input {
-      width: 100%;
-      height: 70px;
-      padding: 21px 39px;
-      outline: none;
-    }
-
-    ::placeholder,
-    &__input {
-      opacity: 1;
-      font-family: Roboto, sans-serif;
-      font-style: normal;
-      font-weight: 300;
-      font-size: 1.4rem;
-      color: #000000;
-    }
-  }
-
-  &__line {
-    width: 100%;
-    height: 16px;
-    background: #c4c4c4;
-  }
-
-  &__list {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  &__img-holder {
-    width: 28vw;
-    height: 28vw;
-    overflow: hidden;
-    margin-bottom: 23px;
-    border-radius: 8px;
-    background-size: cover !important;
-
-    &:not(:nth-child(3n + 1)) {
-      margin-left: 2.3vw;
-    }
-
-    &:hover {
-      opacity: 0.7;
-      cursor: pointer;
-    }
-  }
-}
-</style>
+<style src="./HomeView.scss" />
