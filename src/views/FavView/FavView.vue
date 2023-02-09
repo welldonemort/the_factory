@@ -65,8 +65,8 @@ export default {
       getList();
     };
 
-    onMounted(() => {
-      getList();
+    onMounted(async () => {
+      await getList();
     });
 
     return { state, getList, search, store };
