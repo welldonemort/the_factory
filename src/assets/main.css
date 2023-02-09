@@ -1,0 +1,12 @@
+@import "./base.css";
+
+a {
+  text-decoration: none;
+  transition: 0.4s;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
