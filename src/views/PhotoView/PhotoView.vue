@@ -2,6 +2,18 @@
   <div class="photo">
     <the-loader v-if="state.is_loading" class="photo__loader" />
     <div v-else class="photo__holder">
+      <div v-if="state.is_full" class="photo__full-holder">
+        <div class="photo__full">
+          <img :src="state.photo.urls.full" alt="photo-full" />
+          <img
+            src="@/assets/icons/close.svg"
+            alt="close-ic"
+            class="close"
+            @click="togglePhoto"
+          />
+        </div>
+      </div>
+
       <div class="photo__header">
         <div class="left">
           <img
@@ -49,6 +61,13 @@
           :src="state.photo.urls.full"
           class="photo__content__img"
         />
+
+        <img
+          src="@/assets/icons/scale.svg"
+          alt="scale-ic"
+          class="photo__content__ic"
+          @click="togglePhoto"
+        />
       </div>
     </div>
   </div>
@@ -71,6 +90,7 @@ export default {
 
     const state = reactive({
       is_loading: true,
+      is_full: false,
       //
       photo: null,
     });
@@ -126,7 +146,11 @@ export default {
       return !!fav_exists;
     });
 
-    return { state, download, store, isFavorite };
+    const togglePhoto = () => {
+      state.is_full = !state.is_full;
+    };
+
+    return { state, download, store, isFavorite, togglePhoto };
   },
 };
 </script>
